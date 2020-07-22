@@ -1,28 +1,33 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import { List, Divider, Button, Col, Row } from "antd";
 import axios from "axios";
 import SingleForm from "../components/singleForm";
 
+const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
+
 export default class FAHomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title_id: [] };
-    this.handler = this.handler.bind(this);
     this.header = "";
     this.footer = "";
   }
 
   async componentDidMount() {
-    axios
-      .get(process.env.REACT_APP_SERVER_BASE_URL)
+    axios({
+      method: "get",
+      url: serverBaseUrl.concat("/forms"),
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((response) => {
+        console.log(response.data[0]);
         let titles = [];
         let ids = [];
-        for (let i = 0; i < response.data.forms.length; i++) {
-          titles.push(response.data.forms[i].title);
-          ids.push(response.data.forms[i].id);
+        for (let i = 0; i < response.data.length; i++) {
+          titles.push(response.data[i].title);
+          ids.push(response.data[i]._id);
         }
         let title_id = titles.map(function (t, i) {
           return [t, ids[i]];
@@ -37,10 +42,6 @@ export default class FAHomePage extends React.Component {
         console.log(err);
       });
   }
-
-  componentWillUnmount() { }
-
-  handler() { }
 
   getRoutes() {
     let routes = [];
@@ -65,9 +66,7 @@ export default class FAHomePage extends React.Component {
             <Divider orientation="left">Forms</Divider>
           </Col>
           <Col span={6} style={{ "text-align": "right", padding: 12 }}>
-            <Button onClick={this.props.signOut}>
-              Sign Out.
-            </Button>
+            <Button onClick={this.props.signOut}>Sign Out.</Button>
           </Col>
         </Row>
         <List
@@ -84,7 +83,7 @@ export default class FAHomePage extends React.Component {
         />
         <br />
         <Switch>{this.getRoutes()}</Switch>
-      </Router >
+      </Router>
     );
   }
 }

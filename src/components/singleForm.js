@@ -32,17 +32,22 @@ export default class SingleForm extends React.Component {
   }
 
   onFinish = (values) => {
-    alert("Submitted");
-    // console.log(values);
-    console.log(this.data);
-    axios
-      .post(serverBaseUrl.concat("submit"), this.data)
-      .then(function (response) {
+    axios({
+      method: "post",
+      url: serverBaseUrl.concat("/answers"),
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(this.data),
+    })
+      .then((response) => {
         console.log(response);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
+    alert("Submitted");
   };
 
   onFinishFailed = (errorInfo) => {
@@ -52,14 +57,18 @@ export default class SingleForm extends React.Component {
 
   async componentDidMount() {
     this.data["formId"] = this.props.match.params.id;
-    axios
-      .get(serverBaseUrl.concat(this.props.match.params.id))
+    axios({
+      method: "get",
+      url: serverBaseUrl.concat(`/forms/${this.props.match.params.id}`),
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((response) => {
+        console.log(response);
         let items = [];
         for (let i = 0; i < response.data.fields.length; i++) {
           const element = response.data.fields[i];
           let item;
-          if (element.options) {
+          if (element.options && element.options.length !== 0) {
             if (element.type !== "Location")
               item = (
                 <DropDownMenu

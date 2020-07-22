@@ -46,7 +46,7 @@ class SignIn extends React.Component {
           response.data.user.type
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         //TODO
         console.log(error);
       });
@@ -65,8 +65,6 @@ class SignIn extends React.Component {
           left: "45%",
           "margin-top": "-50px",
           "margin-left": "-50px",
-          //"width": "100px",
-          //"height": "100px",
         }}
       >
         <Form
@@ -105,21 +103,22 @@ class SignIn extends React.Component {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item {...tailLayout} {...itemStyle}>
+          <Form.Item
+            {...tailLayout}
+            {...itemStyle}
+            style={{ textAlign: "center" }}
+          >
             <Button type="primary" htmlType="submit">
               Sign In
             </Button>
           </Form.Item>
-          <Form.Item {...tailLayout} {...itemStyle}>
+          <Form.Item
+            {...tailLayout}
+            {...itemStyle}
+            style={{ textAlign: "center" }}
+          >
             <Link to="/SignUp">
-              <Button
-                style={{
-                  maxWidth: 75,
-                }}
-                type="primary"
-              >
-                Sign Up
-              </Button>
+              <Button type="primary">Sign Up</Button>
             </Link>
           </Form.Item>
         </Form>
