@@ -1,7 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import "antd/dist/antd.css";
-import { List, Divider } from "antd";
+import { List, Divider, Button, Col, Row } from "antd";
 import axios from "axios";
 import SingleForm from "../components/singleForm";
 
@@ -38,9 +38,9 @@ export default class FAHomePage extends React.Component {
       });
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
-  handler() {}
+  handler() { }
 
   getRoutes() {
     let routes = [];
@@ -60,7 +60,16 @@ export default class FAHomePage extends React.Component {
   render() {
     return (
       <Router>
-        <Divider orientation="left">Forms</Divider>
+        <Row>
+          <Col span={18}>
+            <Divider orientation="left">Forms</Divider>
+          </Col>
+          <Col span={6} style={{ "text-align": "right", padding: 12 }}>
+            <Button onClick={this.props.signOut}>
+              Sign Out.
+            </Button>
+          </Col>
+        </Row>
         <List
           header={<div>{this.header}</div>}
           bordered
@@ -75,7 +84,7 @@ export default class FAHomePage extends React.Component {
         />
         <br />
         <Switch>{this.getRoutes()}</Switch>
-      </Router>
+      </Router >
     );
   }
 }

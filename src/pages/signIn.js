@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
-import { withRouter } from "react-router";
+import { withRouter, Link } from "react-router-dom";
 
 const layout = {
   labelCol: {
@@ -29,6 +29,7 @@ const itemStyle = {
 
 class SignIn extends React.Component {
   onFinish = (values) => {
+    //TODO
     this.props.history.push("/FAHomePage");
     this.props.setTokenAndRole("mytoken", "FA");
     console.log("Success:", values);
@@ -88,11 +89,17 @@ class SignIn extends React.Component {
           >
             <Input.Password />
           </Form.Item>
-
           <Form.Item {...tailLayout} {...itemStyle}>
             <Button type="primary" htmlType="submit">
-              Submit
+              Sign In
             </Button>
+          </Form.Item>
+          <Form.Item {...tailLayout} {...itemStyle}>
+            <Link to="/SignUp">
+              <Button>
+                Sign Up.
+              </Button>
+            </Link>
           </Form.Item>
         </Form>
       </div>

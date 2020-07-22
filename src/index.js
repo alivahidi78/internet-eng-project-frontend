@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import SignIn from "./pages/signIn";
+import SignUp from "./pages/signUp";
 import FAHomePage from "./pages/FAHomePage";
 import CAHomePage from "./pages/CAHomePage";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
@@ -23,6 +24,12 @@ class MainRouter extends React.Component {
     });
   };
 
+  signOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    this.setState({ token: null, role: null })
+  }
+
   render() {
     // const token = localStorage.getItem("token");
     // console.log(token);
@@ -31,7 +38,7 @@ class MainRouter extends React.Component {
         <Switch>
           <Route
             path={"/FAHomePage"}
-            render={(props) => <FAHomePage></FAHomePage>}
+            render={(props) => <FAHomePage signOut={this.signOut} />}
           >
             {(() => {
               if (!this.state.token)
@@ -40,13 +47,17 @@ class MainRouter extends React.Component {
           </Route>
           <Route
             path={"/CAHomePage"}
-            render={(props) => <CAHomePage></CAHomePage>}
+            render={(props) => <CAHomePage signOut={this.signOut} />}
           >
             {(() => {
               if (!this.state.token)
                 return <Redirect to="/" />
             })()}
           </Route>
+          <Route
+            path={"/SignUp"}
+            render={(props) => <SignUp />}
+          ></Route>
           <Route
             path={"/"}
             render={(props) => <SignIn setTokenAndRole={this.setTokenAndRole} />}
