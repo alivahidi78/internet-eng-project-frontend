@@ -21,15 +21,35 @@ export default class SingleFormSubTable extends React.Component {
       url: serverBaseUrl.concat(`/answers/?formId=${this.props.match.params.id}`),
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     }).then((response) => {
-      console.log(response)
+      console.log(response);
       if (response.data) {
+        let filters = [];
+        response.data.forEach((row) => {
+          row.values.forEach((field) => {
+            if (field.type === "Location" && field.value.areas)
+              field.value.areas.forEach((area) => {
+                if (!filters[field.name])
+                  filters[field.name] = new Set();
+                filters[field.name].add(area);
+              })
+          })
+        })
         let columns = response.data[0].values.map((t, i) => {
+          let colFilters = filters[t.name] ?
+            Array.from(filters[t.name]).map((v) => {
+              return {
+                text: v,
+                value: v
+              }
+            }) : null
           return {
             title: t.title,
             dataIndex: i,
             key: t.name,
             type: t.type,
-            render: this.renderField(t.type)
+            render: this.renderField(t.type),
+            onFilter: t.type === "Location" ? this.filter(i) : null,
+            filters: colFilters
           };
         })
         columns.push({
@@ -61,10 +81,19 @@ export default class SingleFormSubTable extends React.Component {
   renderField = (type) => {
     switch (type) {
       case "Location":
-        return (data) => (
-          <div>lat: {data.lat}
-            <br /> long: {data.long}
-          </div>)
+        return (data) => {
+          if (data)
+            return (
+              <div >
+                <div style={{ width: "50%", float: "left" }}>
+                  lat: {data.lat}
+                  <br /> long: {data.long}
+                </div>
+                <div style={{ width: "45%", float: "right" }}>
+                  areas: {data.areas.map((e) => e + " ")}
+                </div>
+              </div>)
+        }
       case "Action":
         return (data) => (
           <Space size="middle">
@@ -73,6 +102,16 @@ export default class SingleFormSubTable extends React.Component {
       default:
         break;
     }
+  }
+
+  filter = (dataIndex) => {
+    return (value, record) => {
+      if (record[dataIndex] && record[dataIndex].areas) {
+        // console.log(record[dataIndex].areas);
+        return record[dataIndex].areas.indexOf(value) !== -1;
+      }
+      return false;
+    };
   }
 
   render() {
