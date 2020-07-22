@@ -3,10 +3,35 @@ import axios from "axios";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { List, Divider, Button, Col, Row } from "antd";
 import SingleFormSubTable from "../components/singleFormSubTable";
+import SingleFormDet from "../components/singleFormDet";
 require("dotenv").config();
 const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
-export default class FAHomePage extends React.Component {
+export default class CARouter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route
+            path={"/CAHomePage/formDetails/:id"}
+            render={(props) => <SingleFormDet />}
+          ></Route>
+          <Route
+            path={"/CAHomePage"}
+            render={(props) => <CAHomePage signOut={this.signOut} />}
+          ></Route>
+        </Switch>
+      </Router>
+    );
+  }
+}
+
+class CAHomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title_id: [] };
