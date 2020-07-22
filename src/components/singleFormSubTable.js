@@ -39,11 +39,11 @@ export default class SingleFormSubTable extends React.Component {
           let columns = response.data[0].values.map((t, i) => {
             let colFilters = filters[t.name]
               ? Array.from(filters[t.name]).map((v) => {
-                  return {
-                    text: v,
-                    value: v,
-                  };
-                })
+                return {
+                  text: v,
+                  value: v,
+                };
+              })
               : null;
             return {
               title: t.title,
@@ -64,16 +64,16 @@ export default class SingleFormSubTable extends React.Component {
           });
           let newData = response.data.map((t, i) => {
             return {
+              id: t._id,
               ...t.values.map((t, i) => {
                 return t.value;
-              }),
+              })
             };
           });
           this.setState({
             data: newData,
             cols: columns,
           });
-          console.log(this.state);
         }
       })
       .catch((error) => {
@@ -93,17 +93,17 @@ export default class SingleFormSubTable extends React.Component {
                   <br /> long: {data.long}
                 </div>
                 <div style={{ width: "45%", float: "right" }}>
-                  areas: {data.areas.map((e) => e + " ")}
+                  areas: {data.areas?data.areas.map((e) => e + " "):null}
                 </div>
               </div>
             );
         };
       case "Action":
         return (data) => {
-          console.log(data);
+          let id = data["id"];
           return (
             <Space size="middle">
-              <Link to={`/CAHomePage/${""}`}>Expand</Link>
+              <Link to={`/CAHomePage/formDetails/${id}`}>Expand</Link>
             </Space>
           );
         };
@@ -115,7 +115,6 @@ export default class SingleFormSubTable extends React.Component {
   filter = (dataIndex) => {
     return (value, record) => {
       if (record[dataIndex] && record[dataIndex].areas) {
-        // console.log(record[dataIndex].areas);
         return record[dataIndex].areas.indexOf(value) !== -1;
       }
       return false;

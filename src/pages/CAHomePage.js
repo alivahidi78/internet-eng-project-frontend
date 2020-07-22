@@ -7,31 +7,7 @@ import SingleFormDet from "../components/singleFormDet";
 require("dotenv").config();
 const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
-export default class CARouter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    return (
-      <Router>
-        <Switch>
-          <Route
-            path={"/CAHomePage/formDetails/:id"}
-            render={(props) => <SingleFormDet />}
-          ></Route>
-          <Route
-            path={"/CAHomePage"}
-            render={(props) => <CAHomePage signOut={this.signOut} />}
-          ></Route>
-        </Switch>
-      </Router>
-    );
-  }
-}
-
-class CAHomePage extends React.Component {
+export default class CAHomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title_id: [] };
@@ -70,7 +46,7 @@ class CAHomePage extends React.Component {
     for (let i = 0; i < this.state.title_id.length; i++) {
       routes.push(
         <Route
-          path={"/forms/submissions/:id"}
+          exact path={"/forms/submissions/:id"}
           render={(props) => (
             <SingleFormSubTable
               {...props}
@@ -79,6 +55,10 @@ class CAHomePage extends React.Component {
           )}
         />
       );
+      routes.push(<Route
+        path={"/CAHomePage/formDetails/:id"}
+        render={(props) => <SingleFormDet {...props} key={Math.random()} />}
+      ></Route>)
     }
     return routes;
   }
