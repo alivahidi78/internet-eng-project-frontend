@@ -1,11 +1,17 @@
 import React from "react";
 
 export default class FAHomePage extends React.Component {
-  constructor(props) {}
+  constructor(props) {
+    super(props);
+  }
 
   async componentDidMount() {}
 
   render() {
-    return <></>;
+    return (
+      <>
+        <p>control agent homepage here...</p>
+      </>
+    );
   }
 }

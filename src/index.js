@@ -5,13 +5,18 @@ import SignIn from "./pages/signIn";
 import SignUp from "./pages/signUp";
 import FAHomePage from "./pages/FAHomePage";
 import CAHomePage from "./pages/CAHomePage";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 class MainRouter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       token: localStorage.getItem("token"),
-      role: localStorage.getItem("role")
+      role: localStorage.getItem("role"),
     };
   }
 
@@ -20,19 +25,17 @@ class MainRouter extends React.Component {
     localStorage.setItem("role", newRole);
     this.setState({
       token: newToken,
-      role: newRole
+      role: newRole,
     });
   };
 
   signOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    this.setState({ token: null, role: null })
-  }
+    this.setState({ token: null, role: null });
+  };
 
   render() {
-    // const token = localStorage.getItem("token");
-    // console.log(token);
     return (
       <Router>
         <Switch>
@@ -41,8 +44,7 @@ class MainRouter extends React.Component {
             render={(props) => <FAHomePage signOut={this.signOut} />}
           >
             {(() => {
-              if (!this.state.token)
-                return <Redirect to="/" />
+              if (!this.state.token) return <Redirect to="/" />;
             })()}
           </Route>
           <Route
@@ -50,24 +52,22 @@ class MainRouter extends React.Component {
             render={(props) => <CAHomePage signOut={this.signOut} />}
           >
             {(() => {
-              if (!this.state.token)
-                return <Redirect to="/" />
+              if (!this.state.token) return <Redirect to="/" />;
             })()}
           </Route>
-          <Route
-            path={"/SignUp"}
-            render={(props) => <SignUp />}
-          ></Route>
+          <Route path={"/SignUp"} render={(props) => <SignUp />}></Route>
           <Route
             path={"/"}
-            render={(props) => <SignIn setTokenAndRole={this.setTokenAndRole} />}
+            render={(props) => (
+              <SignIn setTokenAndRole={this.setTokenAndRole} />
+            )}
           >
             {(() => {
               if (this.state.token) {
-                if (this.state.role === "FA")
-                  return <Redirect to="/FAHomePage" />
-                else if (this.state.role === "CA")
-                  return <Redirect to="/CAHomePage" />
+                if (this.state.role === "FieldAgent")
+                  return <Redirect to="/FAHomePage" />;
+                else if (this.state.role === "ControlAgent")
+                  return <Redirect to="/CAHomePage" />;
               }
             })()}
           </Route>

@@ -2,6 +2,10 @@ import React from "react";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import { withRouter, Link } from "react-router-dom";
+const axios = require("axios");
+require("dotenv").config();
+
+const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
 const layout = {
   labelCol: {
@@ -29,15 +33,27 @@ const itemStyle = {
 
 class SignIn extends React.Component {
   onFinish = (values) => {
-    //TODO
-    this.props.history.push("/FAHomePage");
-    this.props.setTokenAndRole("mytoken", "FA");
-    console.log("Success:", values);
+    axios({
+      method: "post",
+      url: serverBaseUrl.concat("/auth/login/"),
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify(values),
+    })
+      .then((response) => {
+        console.log(response);
+        this.props.setTokenAndRole(
+          response.data.token,
+          response.data.user.type
+        );
+      })
+      .catch(function (error) {
+        //TODO
+        console.log(error);
+      });
   };
 
   onFinishFailed = (errorInfo) => {
-    //TODO
-    console.log("Failed:", errorInfo);
+    alert("Submit Failed:", errorInfo);
   };
 
   render() {
@@ -96,8 +112,13 @@ class SignIn extends React.Component {
           </Form.Item>
           <Form.Item {...tailLayout} {...itemStyle}>
             <Link to="/SignUp">
-              <Button>
-                Sign Up.
+              <Button
+                style={{
+                  maxWidth: 75,
+                }}
+                type="primary"
+              >
+                Sign Up
               </Button>
             </Link>
           </Form.Item>

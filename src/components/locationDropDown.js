@@ -16,7 +16,6 @@ export default class LocationDropDown extends React.Component {
       label: `lat:${e.item.props.value.lat} long:${e.item.props.value.long}`,
     });
     this.props.onChange(this.props.name, e.key);
-    // console.log(e);
   };
 
   render() {

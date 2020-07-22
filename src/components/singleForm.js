@@ -8,8 +8,9 @@ import NumericInput from "./numericInput";
 import DropDownMenu from "./dropDown";
 import LocationDropDown from "./locationDropDown";
 import Map from "./map";
+require("dotenv").config();
 
-let serverAPI = "http://localhost:8000/api/forms/";
+const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
 let layout = {
   labelCol: { span: 8 },
@@ -35,7 +36,7 @@ export default class SingleForm extends React.Component {
     // console.log(values);
     console.log(this.data);
     axios
-      .post(serverAPI.concat("submit"), this.data)
+      .post(serverBaseUrl.concat("submit"), this.data)
       .then(function (response) {
         console.log(response);
       })
@@ -52,7 +53,7 @@ export default class SingleForm extends React.Component {
   async componentDidMount() {
     this.data["formId"] = this.props.match.params.id;
     axios
-      .get(serverAPI.concat(this.props.match.params.id))
+      .get(serverBaseUrl.concat(this.props.match.params.id))
       .then((response) => {
         let items = [];
         for (let i = 0; i < response.data.fields.length; i++) {

@@ -1,6 +1,11 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { Form, Input, Button, Select } from "antd";
+import { withRouter } from "react-router-dom";
+const axios = require("axios");
+require("dotenv").config();
+
+const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
 const layout = {
   labelCol: {
@@ -26,15 +31,25 @@ const itemStyle = {
   },
 };
 
-export default class SingUp extends React.Component {
+class SignUp extends React.Component {
   onFinish = (values) => {
-    //TODO
-    console.log("Success:", values);
+    axios({
+      method: "post",
+      url: serverBaseUrl.concat("/users"),
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify(values),
+    })
+      .then((response) => {
+        console.log(response);
+        this.props.history.push("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   onFinishFailed = (errorInfo) => {
-    //TODO
-    console.log("Failed:", errorInfo);
+    alert("Submit Failed:", errorInfo);
   };
 
   render() {
@@ -62,7 +77,7 @@ export default class SingUp extends React.Component {
           <Form.Item
             {...itemStyle}
             label="Role"
-            name="role"
+            name="type"
             rules={[
               {
                 required: true,
@@ -71,9 +86,23 @@ export default class SingUp extends React.Component {
             ]}
           >
             <Select defaultValue={"select your role"}>
-              <Select.Option value="CA">Control Agent</Select.Option>
-              <Select.Option value="FA">Feild Agent</Select.Option>
+              <Select.Option value="ControlAgent">Control Agent</Select.Option>
+              <Select.Option value="FieldAgent">Feild Agent</Select.Option>
             </Select>
+          </Form.Item>
+
+          <Form.Item
+            {...itemStyle}
+            label="Name"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "Please input your name!",
+              },
+            ]}
+          >
+            <Input />
           </Form.Item>
 
           <Form.Item
@@ -114,3 +143,5 @@ export default class SingUp extends React.Component {
     );
   }
 }
+
+export default withRouter(SignUp);
