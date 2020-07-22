@@ -47,8 +47,14 @@ class SignIn extends React.Component {
         );
       })
       .catch((error) => {
-        //TODO
-        console.log(error);
+        if (error.response) {
+          if (
+            error.response.data.error === "User not found" &&
+            error.response.status === 401
+          ) {
+            alert("Wrong Username or Password");
+          }
+        }
       });
   };
 
@@ -118,7 +124,7 @@ class SignIn extends React.Component {
             style={{ textAlign: "center" }}
           >
             <Link to="/SignUp">
-              <Button type="primary">Sign Up</Button>
+              <Button>Sign Up</Button>
             </Link>
           </Form.Item>
         </Form>
