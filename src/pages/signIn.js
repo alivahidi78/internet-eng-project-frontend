@@ -48,11 +48,8 @@ class SignIn extends React.Component {
       })
       .catch((error) => {
         if (error.response) {
-          if (
-            error.response.data.error === "User not found" &&
-            error.response.status === 401
-          ) {
-            alert("Wrong Username or Password");
+          if (error.response.status === 401) {
+            alert(error.response.data.error);
           }
         }
       });
