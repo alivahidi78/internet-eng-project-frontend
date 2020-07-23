@@ -1,9 +1,8 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import { List, Divider, Button, Col, Row } from "antd";
 import axios from "axios";
-import SingleForm from "../components/singleForm";
 
 const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
@@ -43,24 +42,9 @@ export default class FAHomePage extends React.Component {
       });
   }
 
-  getRoutes() {
-    let routes = [];
-    for (let i = 0; i < this.state.title_id.length; i++) {
-      routes.push(
-        <Route
-          path={"/forms/:id"}
-          render={(props) => (
-            <SingleForm {...props} key={Math.random()}></SingleForm>
-          )}
-        />
-      );
-    }
-    return routes;
-  }
-
   render() {
     return (
-      <Router>
+      <>
         <Row>
           <Col span={18}>
             <Divider orientation="left">Forms</Divider>
@@ -81,9 +65,7 @@ export default class FAHomePage extends React.Component {
             </List.Item>
           )}
         />
-        <br />
-        <Switch>{this.getRoutes()}</Switch>
-      </Router>
+      </>
     );
   }
 }

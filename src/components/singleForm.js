@@ -157,15 +157,21 @@ export default class SingleForm extends React.Component {
 
   render() {
     return (
-      <Form
-        {...layout}
-        name="basic"
-        initialValues={{ remember: true }}
-        onFinish={this.onFinish}
-        onFinishFailed={this.onFinishFailed}
+      <div
+        style={{
+          padding: 50,
+        }}
       >
-        {this.state.items}
-      </Form>
+        <Form
+          {...layout}
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={this.onFinish}
+          onFinishFailed={this.onFinishFailed}
+        >
+          {this.state.items}
+        </Form>
+      </div>
     );
   }
 }

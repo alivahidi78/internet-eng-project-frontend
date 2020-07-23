@@ -1,9 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { List, Divider, Button, Col, Row } from "antd";
-import SingleFormSubTable from "../components/singleFormSubTable";
-import SingleFormDet from "../components/singleFormDet";
 require("dotenv").config();
 const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
@@ -41,31 +39,9 @@ export default class CAHomePage extends React.Component {
       });
   }
 
-  getRoutes() {
-    let routes = [];
-    for (let i = 0; i < this.state.title_id.length; i++) {
-      routes.push(
-        <Route
-          exact path={"/forms/submissions/:id"}
-          render={(props) => (
-            <SingleFormSubTable
-              {...props}
-              key={Math.random()}
-            ></SingleFormSubTable>
-          )}
-        />
-      );
-      routes.push(<Route
-        path={"/CAHomePage/formDetails/:id"}
-        render={(props) => <SingleFormDet {...props} key={Math.random()} />}
-      ></Route>)
-    }
-    return routes;
-  }
-
   render() {
     return (
-      <Router>
+      <>
         <Row>
           <Col span={18}>
             <Divider orientation="left">Forms</Divider>
@@ -87,8 +63,7 @@ export default class CAHomePage extends React.Component {
           )}
         />
         <br />
-        <Switch>{this.getRoutes()}</Switch>
-      </Router>
+      </>
     );
   }
 }

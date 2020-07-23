@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Table, Space } from "antd";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 require("dotenv").config();
 
@@ -39,11 +39,11 @@ export default class SingleFormSubTable extends React.Component {
           let columns = response.data[0].values.map((t, i) => {
             let colFilters = filters[t.name]
               ? Array.from(filters[t.name]).map((v) => {
-                return {
-                  text: v,
-                  value: v,
-                };
-              })
+                  return {
+                    text: v,
+                    value: v,
+                  };
+                })
               : null;
             return {
               title: t.title,
@@ -67,7 +67,7 @@ export default class SingleFormSubTable extends React.Component {
               id: t._id,
               ...t.values.map((t, i) => {
                 return t.value;
-              })
+              }),
             };
           });
           this.setState({
@@ -93,7 +93,7 @@ export default class SingleFormSubTable extends React.Component {
                   <br /> long: {data.long}
                 </div>
                 <div style={{ width: "45%", float: "right" }}>
-                  areas: {data.areas?data.areas.map((e) => e + " "):null}
+                  areas: {data.areas ? data.areas.map((e) => e + " ") : null}
                 </div>
               </div>
             );
